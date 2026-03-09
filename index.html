@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simi's Boutique — Designed by Simi Das</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #fdf8f4;
+      --blush: #f5e6df;
+      --rose: #e8b4a0;
+      --rose-gold: #c9956e;
+      --dark-rose: #a0614a;
+      --text: #3a2a24;
+      --muted: #8a7168;
+      --white: #ffffff;
+      --border: #f0ddd5;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text); }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--rose); border-radius: 3px; }
+    input, textarea, button { font-family: 'Jost', sans-serif; outline: none; }
+    button { cursor: pointer; }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes toastAnim { 0%{opacity:0;transform:translateY(20px) translateX(-50%)} 20%,80%{opacity:1;transform:translateY(0) translateX(-50%)} 100%{opacity:0;transform:translateY(-10px) translateX(-50%)} }
+    @keyframes heroReveal { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: rgba(253,248,244,0.93); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+    }
+    .nav-logo { cursor: pointer; }
+    .nav-logo-main { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; letter-spacing: 0.12em; color: var(--text); }
+    .nav-logo-sub { font-size: 9px; letter-spacing: 0.35em; color: var(--rose-gold); margin-top: -2px; font-weight: 500; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 36px; }
+    .nav-link { cursor: pointer; font-size: 12px; letter-spacing: 0.2em; font-weight: 500; color: var(--muted); text-transform: uppercase; transition: color 0.2s; text-decoration: none; }
+    .nav-link:hover, .nav-link.active { color: var(--rose-gold); }
+    .cart-btn {
+      background: none; border: 1.5px solid var(--rose); border-radius: 40px;
+      padding: 8px 20px; display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--text); font-weight: 500; transition: all 0.2s;
+    }
+    .cart-btn:hover { background: var(--blush); }
+    .cart-count {
+      background: var(--rose-gold); color: white; border-radius: 50%;
+      width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; display: none;
+    }
+
+    /* HERO */
+    #home {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 120px 5% 80px; position: relative; overflow: hidden;
+      background: linear-gradient(160deg, #fdf8f4 0%, #f9ede6 50%, #f5e6df 100%);
+    }
+    .hero-orb1 { position: absolute; top: 10%; right: 8%; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(232,180,160,0.25) 0%, transparent 70%); pointer-events: none; }
+    .hero-orb2 { position: absolute; bottom: 15%; left: 5%; width: 240px; height: 240px; border-radius: 50%; background: radial-gradient(circle, rgba(201,149,110,0.15) 0%, transparent 70%); pointer-events: none; }
+    .hero-line1 { position: absolute; top: 40%; left: 15%; width: 1px; height: 120px; background: linear-gradient(to bottom, transparent, var(--rose), transparent); }
+    .hero-line2 { position: absolute; top: 30%; right: 18%; width: 1px; height: 80px; background: linear-gradient(to bottom, transparent, var(--rose), transparent); }
+    .hero-content { animation: heroReveal 1s ease 0.1s both; }
+    .hero-eyebrow { font-size: 11px; letter-spacing: 0.5em; color: var(--rose-gold); font-weight: 500; text-transform: uppercase; margin-bottom: 24px; }
+    .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(72px,10vw,120px); font-weight: 300; line-height: 0.9; letter-spacing: -0.01em; color: var(--text); margin-bottom: 8px; }
+    .hero-title em { font-style: italic; color: var(--rose-gold); }
+    .hero-divider { width: 60px; height: 1px; background: var(--rose-gold); margin: 28px auto; }
+    .hero-sub { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 300; color: var(--muted); letter-spacing: 0.05em; font-style: italic; margin-bottom: 12px; }
+    .hero-desc { max-width: 520px; margin: 0 auto 40px; font-size: 15px; line-height: 1.8; color: var(--muted); font-weight: 300; }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .hero-bottom-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 6px; background: linear-gradient(90deg, var(--rose), var(--rose-gold), var(--rose)); }
+
+    /* BUTTONS */
+    .btn-primary {
+      background: var(--rose-gold); color: white; border: none;
+      padding: 15px 40px; border-radius: 40px; font-size: 13px;
+      letter-spacing: 0.2em; font-weight: 500; text-transform: uppercase;
+      transition: all 0.25s; box-shadow: 0 4px 20px rgba(201,149,110,0.3);
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--dark-rose); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(201,149,110,0.35); }
+    .btn-secondary {
+      background: transparent; color: var(--rose-gold); border: 1.5px solid var(--rose);
+      padding: 15px 36px; border-radius: 40px; font-size: 13px;
+      letter-spacing: 0.2em; font-weight: 500; text-transform: uppercase; transition: all 0.25s;
+    }
+    .btn-secondary:hover { background: var(--rose-gold); color: white; }
+
+    /* BRAND STORY */
+    #story { padding: 80px 5%; background: var(--white); text-align: center; }
+    .story-quote { font-family: 'Cormorant Garamond', serif; font-size: clamp(20px,3vw,28px); font-weight: 300; font-style: italic; color: var(--text); max-width: 700px; margin: 0 auto; line-height: 1.7; }
+    .story-attribution { margin-top: 20px; font-size: 13px; letter-spacing: 0.25em; color: var(--rose-gold); font-weight: 500; }
+    .stats-strip { display: flex; justify-content: center; gap: 60px; margin-top: 60px; flex-wrap: wrap; }
+    .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 42px; font-weight: 300; color: var(--rose-gold); }
+    .stat-label { font-size: 11px; letter-spacing: 0.25em; color: var(--muted); text-transform: uppercase; margin-top: 4px; }
+
+    /* FEATURED */
+    #featured { padding: 80px 5%; background: var(--cream); }
+    .section-eyebrow { font-size: 11px; letter-spacing: 0.4em; color: var(--rose-gold); text-transform: uppercase; font-weight: 500; margin-bottom: 12px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px,5vw,52px); font-weight: 300; color: var(--text); }
+    .section-header { text-align: center; margin-bottom: 56px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 28px; max-width: 1200px; margin: 0 auto; }
+    .product-card { background: var(--white); border-radius: 20px; overflow: hidden; box-shadow: 0 2px 24px rgba(160,97,74,0.07); transition: box-shadow 0.3s; animation: fadeUp 0.5s ease both; }
+    .product-card:hover { box-shadow: 0 8px 40px rgba(160,97,74,0.14); }
+    .product-img-wrap { height: 340px; overflow: hidden; position: relative; }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; display: block; }
+    .product-card:hover .product-img-wrap img { transform: scale(1.06); }
+    .product-overlay { position: absolute; inset: 0; background: rgba(58,42,36,0.4); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; opacity: 0; transition: opacity 0.3s; }
+    .product-card:hover .product-overlay { opacity: 1; }
+    .product-tag { position: absolute; top: 16px; left: 16px; background: var(--rose-gold); color: white; font-size: 10px; padding: 5px 14px; border-radius: 20px; letter-spacing: 0.15em; font-weight: 600; }
+    .product-info { padding: 22px 26px 26px; }
+    .product-cat { font-size: 10px; letter-spacing: 0.3em; color: var(--rose); text-transform: uppercase; margin-bottom: 6px; font-weight: 600; }
+    .product-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; margin-bottom: 8px; color: var(--text); }
+    .product-desc { font-size: 13px; line-height: 1.7; color: var(--muted); margin-bottom: 16px; font-weight: 300; }
+    .product-footer { display: flex; justify-content: space-between; align-items: center; }
+    .product-price { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--rose-gold); font-weight: 400; }
+    .add-cart-btn { background: var(--rose-gold); color: white; border: none; border-radius: 40px; padding: 10px 22px; font-size: 12px; letter-spacing: 0.12em; font-weight: 500; transition: all 0.2s; }
+    .add-cart-btn:hover { background: var(--dark-rose); }
+    .overlay-btn { background: white; color: var(--text); border: none; padding: 13px 32px; border-radius: 40px; font-size: 13px; letter-spacing: 0.15em; font-weight: 600; width: 200px; transition: all 0.2s; }
+    .overlay-btn:hover { background: var(--cream); }
+    .overlay-btn-buy { background: var(--rose-gold); color: white; border: none; padding: 13px 32px; border-radius: 40px; font-size: 13px; letter-spacing: 0.15em; font-weight: 600; width: 200px; transition: all 0.2s; }
+    .overlay-btn-buy:hover { background: var(--dark-rose); }
+
+    /* ABOUT */
+    #about { padding: 100px 5%; background: var(--white); }
+    .about-grid { display: flex; gap: 80px; max-width: 1200px; margin: 0 auto; align-items: center; }
+    .about-img-wrap { width: 42%; flex-shrink: 0; height: 560px; border-radius: 20px; overflow: hidden; position: relative; background: var(--blush); }
+    .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .about-badge { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); background: rgba(253,248,244,0.95); border-radius: 12px; padding: 16px 28px; text-align: center; white-space: nowrap; }
+    .about-badge-name { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--text); }
+    .about-badge-title { font-size: 11px; letter-spacing: 0.3em; color: var(--rose-gold); text-transform: uppercase; margin-top: 4px; }
+    .about-content { flex: 1; }
+    .about-divider { width: 40px; height: 2px; background: var(--rose-gold); margin-bottom: 32px; }
+    .about-text { font-size: 15px; line-height: 1.9; color: var(--muted); margin-bottom: 20px; font-weight: 300; }
+    .about-tags { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+    .about-tag { border: 1px solid var(--border); border-radius: 40px; padding: 8px 18px; font-size: 12px; letter-spacing: 0.1em; color: var(--muted); }
+
+    /* COLLECTION */
+    #collection { padding: 100px 5%; background: var(--cream); }
+    .filter-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
+    .filter-btn { background: transparent; color: var(--muted); border: 1.5px solid var(--border); border-radius: 40px; padding: 8px 22px; font-size: 12px; letter-spacing: 0.15em; font-weight: 500; text-transform: uppercase; transition: all 0.2s; }
+    .filter-btn:hover { border-color: var(--rose-gold); color: var(--rose-gold); }
+    .filter-btn.active { background: var(--rose-gold); color: white; border-color: var(--rose-gold); }
+
+    /* REVIEWS */
+    #reviews { padding: 100px 5%; background: var(--white); }
+    .reviews-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; max-width: 1200px; margin: 0 auto 64px; }
+    .review-card { background: var(--cream); border-radius: 16px; padding: 32px 28px; border: 1px solid var(--border); animation: fadeUp 0.5s ease both; }
+    .stars { display: flex; gap: 2px; }
+    .star { font-size: 16px; color: var(--border); }
+    .star.filled { color: var(--rose-gold); }
+    .review-text { font-size: 15px; line-height: 1.8; color: var(--text); margin: 16px 0 20px; font-weight: 300; font-style: italic; }
+    .review-meta { display: flex; justify-content: space-between; align-items: center; }
+    .review-name { font-weight: 600; font-size: 14px; color: var(--text); }
+    .review-date { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .review-form { max-width: 640px; margin: 0 auto; background: var(--cream); border-radius: 20px; padding: 48px 40px; border: 1px solid var(--border); }
+    .review-form h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; margin-bottom: 8px; text-align: center; color: var(--text); }
+    .review-form p { text-align: center; font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+    .form-group { display: flex; flex-direction: column; gap: 16px; }
+    .form-input { padding: 14px 18px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 14px; background: var(--white); color: var(--text); transition: border-color 0.2s; width: 100%; }
+    .form-input:focus { border-color: var(--rose-gold); }
+    .form-textarea { padding: 14px 18px; border-radius: 10px; border: 1.5px solid var(--border); font-size: 14px; background: var(--white); color: var(--text); resize: vertical; line-height: 1.7; transition: border-color 0.2s; width: 100%; }
+    .form-textarea:focus { border-color: var(--rose-gold); }
+    .star-rating-input { display: flex; gap: 4px; }
+    .star-input { font-size: 28px; color: var(--border); cursor: pointer; transition: color 0.15s; }
+    .star-input.active, .star-input:hover { color: var(--rose-gold); }
+    .submit-full { width: 100%; background: var(--rose-gold); color: white; border: none; padding: 15px; border-radius: 40px; font-size: 13px; letter-spacing: 0.2em; font-weight: 500; text-transform: uppercase; transition: all 0.25s; box-shadow: 0 4px 20px rgba(201,149,110,0.3); }
+    .submit-full:hover { background: var(--dark-rose); transform: translateY(-1px); }
+    .success-msg { text-align: center; padding: 32px 0; animation: fadeIn 0.5s ease; }
+    .success-msg .success-icon { font-size: 48px; margin-bottom: 12px; }
+    .success-msg p { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--rose-gold); }
+    .rating-row { display: flex; align-items: center; gap: 16px; }
+    .rating-row span { font-size: 13px; color: var(--muted); }
+
+    /* CONTACT */
+    #contact { padding: 100px 5%; background: linear-gradient(160deg, #f9ede6 0%, #fdf8f4 100%); }
+    .contact-grid { max-width: 1100px; margin: 0 auto; display: flex; gap: 80px; flex-wrap: wrap; }
+    .contact-info { flex: 1 1 300px; }
+    .contact-divider { width: 40px; height: 2px; background: var(--rose-gold); margin-bottom: 32px; }
+    .contact-detail { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+    .contact-detail span { font-size: 14px; color: var(--muted); }
+    .contact-socials { display: flex; gap: 16px; margin-top: 40px; }
+    .social-link { font-size: 12px; letter-spacing: 0.15em; color: var(--rose-gold); text-decoration: none; font-weight: 500; transition: all 0.2s; }
+    .social-link:hover { color: var(--dark-rose); transform: translateY(-2px); display: inline-block; }
+    .contact-form-wrap { flex: 1 1 340px; }
+    .contact-form-inner { background: var(--white); border-radius: 20px; padding: 44px 40px; box-shadow: 0 4px 40px rgba(160,97,74,0.08); }
+    .contact-success { background: var(--white); border-radius: 20px; padding: 60px 40px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 340px; }
+
+    /* FOOTER */
+    footer { background: var(--text); color: rgba(255,255,255,0.55); padding: 48px 5% 32px; text-align: center; }
+    .footer-name { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: white; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .footer-tag { font-size: 10px; letter-spacing: 0.4em; color: var(--rose); margin-bottom: 28px; }
+    .footer-links { display: flex; justify-content: center; gap: 28px; flex-wrap: wrap; margin-bottom: 28px; }
+    .footer-link { cursor: pointer; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.55); transition: color 0.2s; }
+    .footer-link:hover { color: var(--rose); }
+    .footer-hr { width: 60px; height: 1px; background: rgba(255,255,255,0.1); margin: 0 auto 20px; }
+    .footer-copy { font-size: 12px; }
+
+    /* CART DRAWER */
+    .cart-overlay { position: fixed; inset: 0; z-index: 2000; display: flex; pointer-events: none; opacity: 0; transition: opacity 0.3s; }
+    .cart-overlay.open { pointer-events: all; opacity: 1; }
+    .cart-backdrop { flex: 1; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); }
+    .cart-drawer { width: min(420px, 95vw); background: var(--white); height: 100%; overflow-y: auto; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.35s ease; }
+    .cart-overlay.open .cart-drawer { transform: translateX(0); }
+    .cart-header { padding: 28px 28px 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    .cart-header h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; }
+    .cart-header p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+    .cart-close { background: none; border: none; font-size: 28px; color: var(--muted); line-height: 1; }
+    .cart-items { flex: 1; overflow-y: auto; padding: 20px 28px; }
+    .cart-empty { text-align: center; padding: 60px 0; }
+    .cart-empty .icon { font-size: 48px; margin-bottom: 16px; }
+    .cart-empty p { font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--muted); }
+    .cart-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+    .cart-item img { width: 72px; height: 88px; object-fit: cover; border-radius: 8px; }
+    .cart-item-info { flex: 1; }
+    .cart-item-name { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 400; margin-bottom: 4px; }
+    .cart-item-price { font-size: 14px; color: var(--rose-gold); margin-bottom: 12px; }
+    .cart-item-controls { display: flex; align-items: center; gap: 12px; }
+    .qty-btn { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: none; font-size: 16px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+    .qty-btn:hover { border-color: var(--rose-gold); color: var(--rose-gold); }
+    .qty-val { font-size: 14px; font-weight: 600; min-width: 20px; text-align: center; }
+    .remove-btn { margin-left: auto; background: none; border: none; font-size: 12px; color: var(--muted); letter-spacing: 0.1em; transition: color 0.2s; }
+    .remove-btn:hover { color: var(--dark-rose); }
+    .cart-footer { padding: 20px 28px 32px; border-top: 1px solid var(--border); }
+    .cart-total-row { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .cart-total-row span:first-child { font-size: 13px; color: var(--muted); }
+    .cart-total-row span:last-child { font-family: 'Cormorant Garamond', serif; font-size: 18px; }
+    .cart-shipping { display: flex; justify-content: space-between; margin-bottom: 20px; }
+    .cart-shipping span:first-child { font-size: 13px; color: var(--muted); }
+    .cart-shipping span:last-child { font-size: 13px; color: #4CAF50; font-weight: 500; }
+
+    /* CHECKOUT */
+    .modal-overlay { position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); padding: 20px; display: none; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: var(--white); border-radius: 24px; padding: 48px 44px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; animation: fadeUp 0.4s ease; position: relative; }
+    .modal-close { position: absolute; top: 20px; right: 24px; background: none; border: none; font-size: 28px; color: var(--muted); }
+    .modal-box h3 { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; margin-bottom: 8px; color: var(--text); }
+    .checkout-form { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+    .checkout-row { display: flex; gap: 12px; }
+    .checkout-row .form-input { flex: 1; }
+    .order-summary-box { background: var(--cream); border-radius: 12px; padding: 20px; margin-top: 8px; border: 1px solid var(--border); }
+    .order-summary-label { font-size: 12px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; font-weight: 500; margin-bottom: 12px; }
+    .order-summary-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; color: var(--text); }
+    .order-summary-item span:last-child { font-family: 'Cormorant Garamond', serif; }
+    .order-total-row { border-top: 1px solid var(--border); padding-top: 12px; margin-top: 8px; display: flex; justify-content: space-between; }
+    .order-total-row strong:last-child { font-family: 'Cormorant Garamond', serif; font-size: 18px; color: var(--rose-gold); }
+    .order-success { text-align: center; padding: 20px 0; }
+    .order-success .icon { font-size: 64px; margin-bottom: 20px; }
+    .order-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 32px; color: var(--rose-gold); margin-bottom: 12px; }
+    .order-success p { color: var(--muted); font-size: 15px; line-height: 1.7; }
+
+    /* TOAST */
+    .toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%); background: var(--text); color: white; padding: 12px 28px; border-radius: 40px; font-size: 14px; font-weight: 500; z-index: 9999; animation: toastAnim 2.5s ease forwards; white-space: nowrap; box-shadow: 0 8px 32px rgba(0,0,0,0.18); letter-spacing: 0.04em; pointer-events: none; }
+
+    /* RESPONSIVE */
+    @media(max-width: 900px) {
+      .about-grid { flex-direction: column; gap: 40px; }
+      .about-img-wrap { width: 100%; height: 340px; }
+      .contact-grid { gap: 40px; }
+    }
+    @media(max-width: 768px) {
+      .nav-links { display: none; }
+      .products-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .modal-box { padding: 32px 24px; }
+      .review-form { padding: 32px 24px; }
+      .contact-form-inner { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" onclick="scrollTo('home')">
+    <div class="nav-logo-main">SIMI'S</div>
+    <div class="nav-logo-sub">BOUTIQUE</div>
+  </div>
+  <div class="nav-links">
+    <a class="nav-link active" onclick="scrollTo('home')">Home</a>
+    <a class="nav-link" onclick="scrollTo('about')">About</a>
+    <a class="nav-link" onclick="scrollTo('collection')">Collection</a>
+    <a class="nav-link" onclick="scrollTo('reviews')">Reviews</a>
+    <a class="nav-link" onclick="scrollTo('contact')">Contact</a>
+  </div>
+  <button class="cart-btn" onclick="openCart()">
+    <span>🛍</span>
+    <span>Cart</span>
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-orb1"></div>
+  <div class="hero-orb2"></div>
+  <div class="hero-line1"></div>
+  <div class="hero-line2"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Est. 2021 · Exclusively for Women</p>
+    <h1 class="hero-title">Simi's<br><em>Boutique</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">Designed by Simi Das</p>
+    <p class="hero-desc">Where femininity meets artistry — each piece is a love letter to the modern woman who moves through the world with grace and intention.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="scrollTo('collection')">Explore Collection</button>
+      <button class="btn-secondary" onclick="scrollTo('about')">Our Story</button>
+    </div>
+  </div>
+  <div class="hero-bottom-bar"></div>
+</section>
+
+<!-- BRAND STORY -->
+<section id="story">
+  <p class="story-quote">"Fashion is my language. Every stitch tells a story — of a woman who knows herself, celebrates herself, and steps into every room as if she owns it."</p>
+  <p class="story-attribution">— Simi Das, Founder</p>
+  <div class="stats-strip">
+    <div><div class="stat-num">200+</div><div class="stat-label">Designs Created</div></div>
+    <div><div class="stat-num">4+</div><div class="stat-label">Years of Craft</div></div>
+    <div><div class="stat-num">5000+</div><div class="stat-label">Happy Clients</div></div>
+    <div><div class="stat-num">100%</div><div class="stat-label">Women-First</div></div>
+  </div>
+</section>
+
+<!-- FEATURED -->
+<section id="featured">
+  <div class="section-header">
+    <p class="section-eyebrow">Curated Picks</p>
+    <h2 class="section-title">Featured This Season</h2>
+  </div>
+  <div class="products-grid" id="featuredGrid"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-img-wrap">
+      <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=800&q=80" alt="Simi Das"/>
+      <div class="about-badge">
+        <div class="about-badge-name">Simi Das</div>
+        <div class="about-badge-title">Founder & Creative Director</div>
+      </div>
+    </div>
+    <div class="about-content">
+      <p class="section-eyebrow">About the Designer</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,48px);font-weight:300;line-height:1.15;margin-bottom:28px;color:var(--text)">Crafting Stories<br>Through Fabric</h2>
+      <div class="about-divider"></div>
+      <p class="about-text">Simi Das grew up surrounded by the rich textile traditions of Bengal, watching her mother drape saris with an effortless elegance that left an indelible mark on her creative soul. From childhood sketches to a degree in fashion design, her journey was always destined for the runway.</p>
+      <p class="about-text">In 2021, she founded Simi's Boutique with a singular vision: to create a space exclusively for women — where every piece honours the female form in its diversity, celebrates confidence, and tells a story worth wearing.</p>
+      <p class="about-text">Her design philosophy blends Eastern heritage with contemporary minimalism. She believes clothing should feel like a second skin — not a costume — and every Simi's Boutique garment is designed with that intimate intention.</p>
+      <div class="about-tags">
+        <span class="about-tag">Heritage Fabrics</span>
+        <span class="about-tag">Ethical Sourcing</span>
+        <span class="about-tag">Women-Led</span>
+        <span class="about-tag">Slow Fashion</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COLLECTION -->
+<section id="collection">
+  <div class="section-header">
+    <p class="section-eyebrow">SS 2025</p>
+    <h2 class="section-title">The Collection</h2>
+    <div class="filter-btns" id="filterBtns">
+      <button class="filter-btn active" onclick="filterProducts('All',this)">All</button>
+      <button class="filter-btn" onclick="filterProducts('Casual',this)">Casual</button>
+      <button class="filter-btn" onclick="filterProducts('Formal',this)">Formal</button>
+      <button class="filter-btn" onclick="filterProducts('Evening',this)">Evening</button>
+    </div>
+  </div>
+  <div class="products-grid" id="collectionGrid"></div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews">
+  <div class="section-header">
+    <p class="section-eyebrow">Testimonials</p>
+    <h2 class="section-title">What Our Clients Say</h2>
+    <div style="display:flex;justify-content:center;gap:4px;margin-top:16px">
+      <span style="font-size:20px;color:var(--rose-gold)">★★★★★</span>
+    </div>
+    <p style="font-size:14px;color:var(--muted);margin-top:8px" id="reviewAvg">4.9 / 5 average from 4 reviews</p>
+  </div>
+  <div class="reviews-grid" id="reviewsGrid"></div>
+
+  <!-- Leave a Review -->
+  <div class="review-form" id="reviewFormWrap">
+    <h3>Share Your Experience</h3>
+    <p>We'd love to hear from you</p>
+    <div class="form-group" id="reviewFormInner">
+      <input class="form-input" id="reviewName" placeholder="Your Name"/>
+      <textarea class="form-textarea" id="reviewText" placeholder="Tell us about your experience..." rows="4"></textarea>
+      <div class="rating-row">
+        <span>Your rating:</span>
+        <div class="star-rating-input" id="starInput">
+          <span class="star-input" data-val="1" onclick="setRating(1)">★</span>
+          <span class="star-input" data-val="2" onclick="setRating(2)">★</span>
+          <span class="star-input" data-val="3" onclick="setRating(3)">★</span>
+          <span class="star-input" data-val="4" onclick="setRating(4)">★</span>
+          <span class="star-input" data-val="5" onclick="setRating(5)">★</span>
+        </div>
+      </div>
+      <button class="submit-full" onclick="submitReview()">Submit Review</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <p class="section-eyebrow">Get In Touch</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,48px);font-weight:300;color:var(--text);margin-bottom:24px">We'd Love to Hear From You</h2>
+      <div class="contact-divider"></div>
+      <p style="font-size:15px;line-height:1.9;color:var(--muted);margin-bottom:36px;font-weight:300">Have a question about sizing, custom orders, or just want to say hello? Simi and her team personally read every message.</p>
+      <div class="contact-detail"><span style="font-size:20px">📧</span><span>hello@simisboutique.in</span></div>
+      <div class="contact-detail"><span style="font-size:20px">📱</span><span>+91 98765 43210</span></div>
+      <div class="contact-detail"><span style="font-size:20px">📍</span><span>Park Street, Kolkata, West Bengal</span></div>
+      <div class="contact-socials">
+        <a href="#" class="social-link">Instagram</a>
+        <a href="#" class="social-link">Pinterest</a>
+        <a href="#" class="social-link">Facebook</a>
+      </div>
+    </div>
+    <div class="contact-form-wrap">
+      <div class="contact-form-inner" id="contactFormInner">
+        <div class="form-group">
+          <input class="form-input" id="cName" placeholder="Your Name"/>
+          <input class="form-input" id="cEmail" placeholder="Email Address" type="email"/>
+          <textarea class="form-textarea" id="cMessage" placeholder="Your message..." rows="5"></textarea>
+          <button class="submit-full" onclick="submitContact()">Send Message</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">SIMI'S BOUTIQUE</div>
+  <div class="footer-tag">EXCLUSIVELY FOR WOMEN</div>
+  <div class="footer-links">
+    <span class="footer-link" onclick="scrollTo('home')">Home</span>
+    <span class="footer-link" onclick="scrollTo('about')">About</span>
+    <span class="footer-link" onclick="scrollTo('collection')">Collection</span>
+    <span class="footer-link" onclick="scrollTo('reviews')">Reviews</span>
+    <span class="footer-link" onclick="scrollTo('contact')">Contact</span>
+  </div>
+  <div class="footer-hr"></div>
+  <p class="footer-copy">© 2025 Simi's Boutique · Designed with love by Simi Das · Kolkata, India</p>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay">
+  <div class="cart-backdrop" onclick="closeCart()"></div>
+  <div class="cart-drawer">
+    <div class="cart-header">
+      <div>
+        <h3>Your Cart</h3>
+        <p id="cartHeaderCount">0 items</p>
+      </div>
+      <button class="cart-close" onclick="closeCart()">×</button>
+    </div>
+    <div class="cart-items" id="cartItemsEl"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none">
+      <div class="cart-total-row"><span>Subtotal</span><span id="cartSubtotal" style="font-family:'Cormorant Garamond',serif;font-size:18px"></span></div>
+      <div class="cart-shipping"><span>Shipping</span><span style="color:#4CAF50;font-weight:500">Free</span></div>
+      <button class="submit-full" onclick="openCheckout()">Proceed to Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal-box" id="checkoutBox">
+    <button class="modal-close" onclick="closeCheckout()">×</button>
+    <h3>Checkout</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Secure &amp; encrypted payment</p>
+    <div class="checkout-form">
+      <div class="checkout-row">
+        <input class="form-input" placeholder="First Name"/>
+        <input class="form-input" placeholder="Last Name"/>
+      </div>
+      <input class="form-input" placeholder="Email Address" type="email"/>
+      <input class="form-input" placeholder="Phone Number"/>
+      <input class="form-input" placeholder="Delivery Address"/>
+      <div class="checkout-row">
+        <input class="form-input" placeholder="City"/>
+        <input class="form-input" placeholder="PIN Code"/>
+      </div>
+      <div class="order-summary-box">
+        <div class="order-summary-label">Order Summary</div>
+        <div id="checkoutItems"></div>
+        <div class="order-total-row">
+          <strong>Total</strong>
+          <strong id="checkoutTotal"></strong>
+        </div>
+      </div>
+      <button class="submit-full" id="placeOrderBtn" onclick="placeOrder()">🔒 Place Order</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ─── DATA ───────────────────────────────────────────────────────
+  const products = [
+    { id:1, name:"Rosette Evening Gown", category:"Evening", price:289, description:"A floor-length gown in blush silk with delicate floral embroidery at the waist.", image:"https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=600&q=80", tag:"Bestseller" },
+    { id:2, name:"Pearl Linen Co-ord Set", category:"Casual", price:149, description:"Breezy linen blazer and wide-leg trouser in warm ivory — effortless daytime chic.", image:"https://images.unsplash.com/photo-1509631179647-0177331693ae?w=600&q=80", tag:"New" },
+    { id:3, name:"Saffron Wrap Dress", category:"Casual", price:179, description:"Flowing wrap silhouette in a warm saffron hue, perfect for brunches to soirées.", image:"https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&q=80", tag:"" },
+    { id:4, name:"Midnight Velvet Blazer", category:"Formal", price:219, description:"Deep burgundy velvet blazer with statement gold buttons — power meets elegance.", image:"https://images.unsplash.com/photo-1554412933-514a83d2f3c8?w=600&q=80", tag:"Limited" },
+    { id:5, name:"Opaline Silk Blouse", category:"Casual", price:129, description:"Liquid silk blouse in shimmering opaline with a statement bow collar.", image:"https://images.unsplash.com/photo-1485968579580-b6d095142e6e?w=600&q=80", tag:"New" },
+    { id:6, name:"Champagne Midi Skirt", category:"Evening", price:159, description:"Pleated organza midi skirt that catches every shimmer of light as you move.", image:"https://images.unsplash.com/photo-1583744946564-b52ac1c389c8?w=600&q=80", tag:"Bestseller" },
+  ];
+
+  let reviewsData = [
+    { id:1, name:"Priya S.", rating:5, date:"Feb 2025", text:"The Rosette Gown is absolutely dreamy. I wore it to my cousin's wedding and couldn't stop receiving compliments. Simi's designs have this rare quality — they feel made for you." },
+    { id:2, name:"Anya M.", rating:5, date:"Jan 2025", text:"Pearl Co-ord arrived perfectly packaged. The linen is so luxurious. Simi clearly understands what modern women want — comfort without sacrificing elegance." },
+    { id:3, name:"Ritu K.", rating:4, date:"Dec 2024", text:"The Saffron Wrap Dress is versatile and gorgeous. I've worn it three different ways. Sizing is true to description. Will definitely be ordering again!" },
+    { id:4, name:"Meena T.", rating:5, date:"Mar 2025", text:"Exquisite quality and fast shipping. The Midnight Blazer is statement-making but wearable. This boutique is my new obsession." },
+  ];
+
+  let cart = [];
+  let reviewRating = 0;
+
+  // ─── HELPERS ────────────────────────────────────────────────────
+  function inr(usd) { return '₹' + (usd * 83).toLocaleString('en-IN'); }
+
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior:'smooth' });
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  }
+
+  function showToast(msg) {
+    document.querySelectorAll('.toast').forEach(t => t.remove());
+    const t = document.createElement('div');
+    t.className = 'toast'; t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2600);
+  }
+
+  function starsHTML(rating, size=16) {
+    return [1,2,3,4,5].map(s =>
+      `<span class="star${s<=rating?' filled':''}" style="font-size:${size}px">★</span>`
+    ).join('');
+  }
+
+  // ─── PRODUCTS ───────────────────────────────────────────────────
+  function productCardHTML(p, delay=0) {
+    return `
+    <div class="product-card" style="animation-delay:${delay}s">
+      <div class="product-img-wrap">
+        <img src="${p.image}" alt="${p.name}" loading="lazy"/>
+        <div class="product-overlay">
+          <button class="overlay-btn" onclick="addToCart(${p.id})">Add to Cart</button>
+          <button class="overlay-btn-buy" onclick="addToCart(${p.id});openCart()">Buy Now</button>
+        </div>
+        ${p.tag ? `<span class="product-tag">${p.tag.toUpperCase()}</span>` : ''}
+      </div>
+      <div class="product-info">
+        <div class="product-cat">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <p class="product-desc">${p.description}</p>
+        <div class="product-footer">
+          <span class="product-price">${inr(p.price)}</span>
+          <button class="add-cart-btn" onclick="addToCart(${p.id})">+ Cart</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  function renderFeatured() {
+    document.getElementById('featuredGrid').innerHTML =
+      products.slice(0,3).map((p,i) => productCardHTML(p, i*0.15)).join('');
+  }
+
+  function renderCollection(filter='All') {
+    const filtered = filter === 'All' ? products : products.filter(p => p.category === filter);
+    document.getElementById('collectionGrid').innerHTML =
+      filtered.map((p,i) => productCardHTML(p, i*0.08)).join('');
+  }
+
+  function filterProducts(cat, btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCollection(cat);
+  }
+
+  // ─── CART ───────────────────────────────────────────────────────
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const ex = cart.find(x => x.id === id);
+    if (ex) ex.qty++; else cart.push({ ...p, qty: 1 });
+    updateCartUI();
+    showToast(p.name + ' added to cart ✓');
+  }
+
+  function removeFromCart(id) { cart = cart.filter(x => x.id !== id); updateCartUI(); }
+
+  function updateQty(id, delta) {
+    const item = cart.find(x => x.id === id);
+    if (item) { item.qty = Math.max(1, item.qty + delta); updateCartUI(); }
+  }
+
+  function updateCartUI() {
+    const count = cart.reduce((s,i) => s+i.qty, 0);
+    const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+    const countEl = document.getElementById('cartCount');
+    countEl.textContent = count;
+    countEl.style.display = count > 0 ? 'flex' : 'none';
+    document.getElementById('cartHeaderCount').textContent = count + ' item' + (count!==1?'s':'');
+    document.getElementById('cartSubtotal').textContent = inr(total);
+    document.getElementById('cartFooter').style.display = cart.length > 0 ? 'block' : 'none';
+
+    const el = document.getElementById('cartItemsEl');
+    if (cart.length === 0) {
+      el.innerHTML = `<div class="cart-empty"><div class="icon">🛍</div><p>Your cart is empty</p><button class="btn-primary" style="margin-top:20px" onclick="closeCart();scrollTo('collection')">Browse Collection</button></div>`;
+    } else {
+      el.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.image}" alt="${item.name}"/>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${inr(item.price)}</div>
+            <div class="cart-item-controls">
+              <button class="qty-btn" onclick="updateQty(${item.id},-1)">−</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="updateQty(${item.id},1)">+</button>
+              <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+            </div>
+          </div>
+        </div>`).join('');
+    }
+  }
+
+  function openCart() { document.getElementById('cartOverlay').classList.add('open'); }
+  function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); }
+
+  // ─── CHECKOUT ───────────────────────────────────────────────────
+  function openCheckout() {
+    closeCart();
+    const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+    document.getElementById('checkoutItems').innerHTML = cart.map(i =>
+      `<div class="order-summary-item"><span>${i.name} × ${i.qty}</span><span>${inr(i.price*i.qty)}</span></div>`
+    ).join('');
+    document.getElementById('checkoutTotal').textContent = inr(total);
+    document.getElementById('placeOrderBtn').textContent = '🔒 Place Order · ' + inr(total);
+    document.getElementById('checkoutModal').classList.add('open');
+    document.getElementById('checkoutBox').innerHTML = document.getElementById('checkoutBox').innerHTML; // reset
+    renderCheckoutForm();
+  }
+
+  function renderCheckoutForm() {
+    const total = cart.reduce((s,i) => s+i.price*i.qty, 0);
+    document.getElementById('checkoutBox').innerHTML = `
+      <button class="modal-close" onclick="closeCheckout()">×</button>
+      <h3>Checkout</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:24px">Secure & encrypted payment</p>
+      <div class="checkout-form">
+        <div class="checkout-row">
+          <input class="form-input" placeholder="First Name"/>
+          <input class="form-input" placeholder="Last Name"/>
+        </div>
+        <input class="form-input" placeholder="Email Address" type="email"/>
+        <input class="form-input" placeholder="Phone Number"/>
+        <input class="form-input" placeholder="Delivery Address"/>
+        <div class="checkout-row">
+          <input class="form-input" placeholder="City"/>
+          <input class="form-input" placeholder="PIN Code"/>
+        </div>
+        <div class="order-summary-box">
+          <div class="order-summary-label">Order Summary</div>
+          ${cart.map(i => `<div class="order-summary-item"><span>${i.name} × ${i.qty}</span><span>${inr(i.price*i.qty)}</span></div>`).join('')}
+          <div class="order-total-row"><strong>Total</strong><strong>${inr(total)}</strong></div>
+        </div>
+        <button class="submit-full" onclick="placeOrder()">🔒 Place Order · ${inr(total)}</button>
+      </div>`;
+  }
+
+  function placeOrder() {
+    cart = [];
+    updateCartUI();
+    document.getElementById('checkoutBox').innerHTML = `
+      <div class="order-success">
+        <div class="icon">🌸</div>
+        <h3>Order Placed!</h3>
+        <p>Thank you for shopping with Simi's Boutique. Your order is confirmed and will be delivered within 5–7 working days.</p>
+      </div>`;
+    setTimeout(() => { closeCheckout(); }, 3500);
+  }
+
+  function closeCheckout() { document.getElementById('checkoutModal').classList.remove('open'); }
+
+  // ─── REVIEWS ────────────────────────────────────────────────────
+  function renderReviews() {
+    document.getElementById('reviewsGrid').innerHTML = reviewsData.map((r,i) => `
+      <div class="review-card" style="animation-delay:${i*0.08}s">
+        <div class="stars">${starsHTML(r.rating)}</div>
+        <p class="review-text">"${r.text}"</p>
+        <div class="review-meta">
+          <div><div class="review-name">${r.name}</div><div class="review-date">${r.date}</div></div>
+          <span style="font-size:22px">✓</span>
+        </div>
+      </div>`).join('');
+    const avg = (reviewsData.reduce((s,r)=>s+r.rating,0)/reviewsData.length).toFixed(1);
+    document.getElementById('reviewAvg').textContent = avg + ' / 5 average from ' + reviewsData.length + ' reviews';
+  }
+
+  function setRating(val) {
+    reviewRating = val;
+    document.querySelectorAll('.star-input').forEach(s => {
+      s.classList.toggle('active', parseInt(s.dataset.val) <= val);
+    });
+  }
+
+  function submitReview() {
+    const name = document.getElementById('reviewName').value.trim();
+    const text = document.getElementById('reviewText').value.trim();
+    if (!name || !text || !reviewRating) { showToast('Please fill all fields and pick a rating'); return; }
+    reviewsData.unshift({ id: Date.now(), name, rating: reviewRating, text, date: 'Just now' });
+    renderReviews();
+    document.getElementById('reviewFormInner').innerHTML = `
+      <div class="success-msg">
+        <div class="success-icon">💌</div>
+        <p>Thank you for your kind words!</p>
+      </div>`;
+    setTimeout(() => {
+      document.getElementById('reviewFormInner').innerHTML = `
+        <input class="form-input" id="reviewName" placeholder="Your Name"/>
+        <textarea class="form-textarea" id="reviewText" placeholder="Tell us about your experience..." rows="4"></textarea>
+        <div class="rating-row">
+          <span>Your rating:</span>
+          <div class="star-rating-input" id="starInput">
+            <span class="star-input" data-val="1" onclick="setRating(1)">★</span>
+            <span class="star-input" data-val="2" onclick="setRating(2)">★</span>
+            <span class="star-input" data-val="3" onclick="setRating(3)">★</span>
+            <span class="star-input" data-val="4" onclick="setRating(4)">★</span>
+            <span class="star-input" data-val="5" onclick="setRating(5)">★</span>
+          </div>
+        </div>
+        <button class="submit-full" onclick="submitReview()">Submit Review</button>`;
+      reviewRating = 0;
+    }, 3000);
+  }
+
+  // ─── CONTACT ────────────────────────────────────────────────────
+  function submitContact() {
+    const name = document.getElementById('cName').value.trim();
+    const email = document.getElementById('cEmail').value.trim();
+    const msg = document.getElementById('cMessage').value.trim();
+    if (!name || !email || !msg) { showToast('Please fill all fields'); return; }
+    document.getElementById('contactFormInner').innerHTML = `
+      <div class="contact-success">
+        <div style="font-size:56px;margin-bottom:16px">🌸</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--rose-gold);margin-bottom:12px">Message Sent!</h3>
+        <p style="color:var(--muted);font-size:14px">Simi will get back to you within 24 hours.</p>
+      </div>`;
+  }
+
+  // ─── SCROLL SPY ─────────────────────────────────────────────────
+  const sections = ['home','about','collection','reviews','contact'];
+  window.addEventListener('scroll', () => {
+    let current = 'home';
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el && window.scrollY >= el.offsetTop - 100) current = id;
+    });
+    document.querySelectorAll('.nav-link').forEach((l,i) => {
+      l.classList.toggle('active', sections[i] === current);
+    });
+  });
+
+  // ─── INIT ───────────────────────────────────────────────────────
+  renderFeatured();
+  renderCollection();
+  renderReviews();
+  updateCartUI();
+</script>
+</body>
+</html>
